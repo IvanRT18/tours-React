@@ -9,6 +9,12 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [tours, setTours] = useState([]);
 
+  const removeTour = (id) => {
+    const newTours = tours.filter((tour) => tour.id !== id);
+    console.log(newTours);
+    setTours(newTours);
+  };
+
   const fetchData = async () => {
     setIsLoading(true);
     try {
@@ -36,23 +42,28 @@ const App = () => {
     );
   }
 
-  return (
-    <>
+  if (tours.length < 1) {
+    return (
       <main>
-        <h2 className="title">Our tours</h2>
-        <h2 className="title-underline"></h2>
-        <div className="tours">
-          {tours ? (
-            tours.map((tour) => {
-              // const { id, image, info, name, price } = ;
-              return <Tour key={tour.id} tour={tour} />;
-            })
-          ) : (
-            <Loading />
-          )}
+        <div className="title">
+          <h2>There are no more tours</h2>
+          <button
+            type="button"
+            className="btn"
+            onClick={fetchData}
+            style={{ marginTop: "2rem" }}
+          >
+            Reload
+          </button>
         </div>
       </main>
-    </>
+    );
+  }
+
+  return (
+    <main>
+      <Tours tours={tours} removeTour={removeTour} />
+    </main>
   );
 };
 export default App;
